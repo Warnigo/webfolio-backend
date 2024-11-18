@@ -1,9 +1,9 @@
-<div style="text-align: center;">
+<div align="center">
     <h1>
         <samp>Webfolio Backend</samp>
     </h1>
-    <p style="margin: 0;">Fast, scalable backend solution with robust REST APIs, secure authentication, and seamless database integration.</p>
-    <p style="margin: 0;">Built to optimize web applications with speed, reliability, and modern architecture.</p>
+    <p>Fast, scalable backend solution with robust REST APIs, secure authentication, and seamless database integration.</p>
+    <p>Built to optimize web applications with speed, reliability, and modern architecture.</p>
 </div>
 
 <p align="center">
