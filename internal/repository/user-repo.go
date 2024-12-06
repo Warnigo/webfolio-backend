@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"webfolio-backend/domain"
+	"webfolio-backend/internal/domain"
 )
 
 type UserRepository interface {

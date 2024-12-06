@@ -4,15 +4,14 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"webfolio-backend/internal/handler"
+	"webfolio-backend/internal/repository"
+	"webfolio-backend/internal/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	"webfolio-backend/handler"
-	"webfolio-backend/repository"
-	"webfolio-backend/service"
 )
 
 func main() {
@@ -22,9 +21,13 @@ func main() {
 	}
 
 	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		log.Fatal("DATABASE_URL environment variable not set")
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("failed to connect to the database")
+		log.Fatal("Failed to connect to the database:", err)
 	}
 
 	userRepo := repository.NewUserRepository(db)
@@ -43,8 +46,7 @@ func main() {
 
 	r.POST("/users", userHandler.CreateUser)
 
-	err = r.Run(":8080")
-	if err != nil {
-		return
+	if err := r.Run(":8080"); err != nil {
+		log.Fatalf("Error starting server: %v", err)
 	}
 }

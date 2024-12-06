@@ -1,8 +1,8 @@
 package service
 
 import (
-	"webfolio-backend/domain"
-	"webfolio-backend/repository"
+	"webfolio-backend/internal/domain"
+	"webfolio-backend/internal/repository"
 )
 
 type UserService interface {

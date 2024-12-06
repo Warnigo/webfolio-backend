@@ -1,11 +1,10 @@
 package handler
 
 import (
-	"net/http"
-	"webfolio-backend/domain"
-	"webfolio-backend/service"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"webfolio-backend/internal/domain"
+	"webfolio-backend/internal/service"
 )
 
 type UserHandler struct {

@@ -1,6 +1,6 @@
 GO = go
 MAIN_GO = cmd/main.go
-BINARY_NAME = myapp
+BINARY_NAME = main
 
 .PHONY: all
 all: build
