@@ -1,33 +1,33 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
-	"os"
+
+	"webfolio-backend/internal/domain"
 	"webfolio-backend/internal/handler"
+	"webfolio-backend/internal/infrastructures/database"
 	"webfolio-backend/internal/repository"
 	"webfolio-backend/internal/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func main() {
-	err := godotenv.Load()
+	gin.SetMode(gin.ReleaseMode)
+	database.ConnectDatabase()
+
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		Conn: database.DB,
+	}), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Failed to initialize GORM with the database:", err)
 	}
 
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		log.Fatal("DATABASE_URL environment variable not set")
-	}
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to the database:", err)
+	if err := db.AutoMigrate(&domain.User{}); err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
 	}
 
 	userRepo := repository.NewUserRepository(db)
@@ -41,7 +41,6 @@ func main() {
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
 	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
 	config.ExposeHeaders = []string{"Content-Length"}
-
 	r.Use(cors.New(config))
 
 	r.POST("/users", userHandler.CreateUser)
